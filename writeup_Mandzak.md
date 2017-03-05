@@ -23,7 +23,10 @@ The goals / steps of this project are the following:
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
-[random50]: ./examples/random50signs.png
+[random50signs.png]: ./examples/random50signs.png
+[labelsFrequency.png]: ./examples/labelsFrequency.png
+[minorityClassSign.png]: ./examples/minorityClassSign.png
+[majorityClassSign.png]: ./examples/majorityClassSign.png
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -55,18 +58,25 @@ signs data set:
 ####2. Include an exploratory visualization of the dataset and identify where the code is in your code file.
 
 The code for this step is contained in code cells 5 - 10 of the IPython notebook.  
-Method ```draw_signs``` (cell 5) is responsible for drawing a limited random subset of all signs, of a given class or a random class
-and was used to produce images below.
+Method ```draw_signs``` (cell 5) is responsible for drawing a limited random subset of all signs or a limited sequential subset of a given class of signs. ```draw_signs``` was used to produce images below.
 
-This random set gives us general presentation of traffic sign images of various classes:
+Following random set gives us general presentation of traffic sign images of various classes:
 
-![alt text][random50]
+![alt text][random50signs.png]
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+Here is an exploratory visualization of the data set. It is a bar chart showing frequencies of sign classes in training, validations and test sets:
 
-![alt text][image1]
+![alt text][labelsFrequency.png]
 
-![alt text][image2]
+We can see here that classes are highly imbalanced so we need to try balancing them to reduce negative effects on the quality of classification. Cell 8 gives us mean frequency of 809 and we'll use it as a target for random under- and oversampling.
+
+Following two images present sequential (as met in the dataset) subsets of signs in minority and majority classes correspondingly:
+
+![alt text][minorityClassSign.png]
+
+![alt text][majorityClassSign.png]
+
+For now we just notice that both classes contain groups of relatevely similiar images that are probably obtained from video frames series.
 
 ###Design and Test a Model Architecture
 
