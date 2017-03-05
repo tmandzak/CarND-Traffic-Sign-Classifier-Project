@@ -23,6 +23,7 @@ The goals / steps of this project are the following:
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
+[random50]: ./examples/random50signs.png
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -32,29 +33,40 @@ The goals / steps of this project are the following:
 
 ####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
 
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+You're reading it! and here is a link to my [project code](https://github.com/tmandzak/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb).
+
+New images found on the web and rescaled to 32x32 sizes are placed in [signs](https://github.com/tmandzak/CarND-Traffic-Sign-Classifier-Project/tree/master/signs) folder. Other images used in this writeup can be found in [examples](https://github.com/tmandzak/CarND-Traffic-Sign-Classifier-Project/tree/master/examples) folder.
 
 ###Data Set Summary & Exploration
 
 ####1. Provide a basic summary of the data set and identify where in your code the summary was done. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
-The code for this step is contained in the second code cell of the IPython notebook.  
+The code for this step is contained in the code cell 3 of the IPython notebook.  
 
-I used the pandas library to calculate summary statistics of the traffic
+I used numpy to calculate summary statistics of the traffic
 signs data set:
 
-* The size of training set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+* The size of training set is 34799
+* The size of validation set is 4410
+* The size of training set is 12630
+* The shape of a traffic sign image is (32, 32, 3)
+* The number of unique classes/labels in the data set is 43
 
 ####2. Include an exploratory visualization of the dataset and identify where the code is in your code file.
 
-The code for this step is contained in the third code cell of the IPython notebook.  
+The code for this step is contained in code cells 5 - 10 of the IPython notebook.  
+Method ```draw_signs``` (cell 5) is responsible for drawing a limited random subset of all signs, of a given class or a random class
+and was used to produce images below.
+
+This random set gives us general presentation of traffic sign images of various classes:
+
+![alt text][random50]
 
 Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
 
 ![alt text][image1]
+
+![alt text][image2]
 
 ###Design and Test a Model Architecture
 
