@@ -27,6 +27,9 @@ The goals / steps of this project are the following:
 [labelsFrequency.png]: ./examples/labelsFrequency.png
 [minorityClassSign.png]: ./examples/minorityClassSign.png
 [majorityClassSign.png]: ./examples/majorityClassSign.png
+[grayscale.png]: ./examples/grayscale.png
+[scaling.png]: ./examples/scaling.png
+[perturbation.png]: ./examples/perturbation.png
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -76,38 +79,47 @@ Following two images present sequential (as met in the dataset) subsets of signs
 
 ![alt text][majorityClassSign.png]
 
-For now we just notice that both classes contain groups of relatevely similiar images that are probably obtained from video frames series.
+For now I'll just notice that both classes contain groups of relatevely similiar images that are probably obtained as video frames series recorded on the same sign. 
 
 ###Design and Test a Model Architecture
 
 ####1. Describe how, and identify where in your code, you preprocessed the image data. What tecniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc.
 
-The code for this step is contained in the fourth code cell of the IPython notebook.
+Conversion to grayscale is a widely used technique in Computer Vision that lets reduce model complexity so I've decided to apply it in this project as well. Another technique I am going to try out is [Histogram equalization](https://en.wikipedia.org/wiki/Histogram_equalization). Through this adjustment the intensities can be better distributed on the histogram. This allows for areas of lower local contrast to gain a higher contrast. Demonstration of these methods is performed in cells 12-16 and includes following illustration: 
 
-As a first step, I decided to convert the images to grayscale because ...
+![alt text][grayscale.png]
 
-Here is an example of a traffic sign image before and after grayscaling.
+Since the range of values of raw data varies widely, in some machine learning algorithms, objective functions will not work properly without normalization. In this project I'm going to try out three ways of normalization:
 
-![alt text][image2]
+* scale the range in [−1, 1] - squeeze
+* standardize 
+* scale the range in [0, 1] - normalize
 
-As a last step, I normalized the image data because ...
+These methods are implemented and presented in cells 20-21. Here is an example of a traffic sign image before and after normalization:
+
+![alt text][scaling.png]
+
+Full preprocessing is implemented in the cell 22 in method ```preprocess``` that is applied to the dataset in the cell 37.
+Note that preprocessing in current solution also includes under/oversampling (augmentation) of the training data.
 
 ####2. Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)
 
-The code for splitting the data into training and validation sets is contained in the fifth code cell of the IPython notebook.  
+In this project I just used the validation set provided in valid.p file.
 
-To cross validate my model, I randomly split the training data into a training set and validation set. I did this by ...
+Code cells 17-19 of the IPython notebook contain the code for balancing training data classes through random under- and oversampling with options to just copy existing images or apply additional random perturbation. I decided to try out undersampling of majority classes in the training dataset since there can be lots of similarities in majority classes as demonstrated on exploratory visualisation figure. Images that are chosen for oversampling are randomly perturbed in position ([-2,2] pixels), in scale ([.9,1.1] ratio) and rotation ([-15,+15] degrees) as suggested in this [article](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf).
 
-My final training set had X number of images. My validation set and test set had Y and Z number of images.
+Here is an example of an original image and augmented images that correspond to aforementioned perturbations:
 
-The sixth code cell of the IPython notebook contains the code for augmenting the data set. I decided to generate additional data because ... To add more data to the the data set, I used the following techniques because ... 
+![alt text][perturbation.png]
 
-Here is an example of an original image and an augmented image:
+I am going to try out following cases of balancing:
 
-![alt text][image3]
+* undersampling, when majority classes are decreased to 809 members by random drop out
+* oversampling, when minority classes are increased to 809 members by random duplicationg
+* oversampling with perturbation (augmentation)
+* undersampling + oversampling simulaneously, when all classes have equal amounts of 809 members
 
-The difference between the original data set and the augmented data set is the following ... 
-
+Balancing is implemented in the ```resample``` method that is applied to training dataset in the cell 37 inside of the ```preprocess``` method as noted before.
 
 ####3. Describe, and identify where in your code, what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
