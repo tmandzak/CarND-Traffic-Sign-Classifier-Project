@@ -160,9 +160,42 @@ My final model consists of the following layers:
 
 ####4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-The code for training the model is located in the eigth cell of the ipython notebook. 
+The code for training the model is located in cells **33-40** of the ipython notebook. 
+To train the model, I used the code from [LeNet Lab Solution](https://github.com/udacity/CarND-LeNet-Lab/blob/master/LeNet-Lab-Solution.ipynb) that was slightly modified and reorganized to a few mothods:
 
-To train the model, I used an ....
+* ```evaluate``` - responsible for evaluation as in the original code
+* ```train_and_validate``` - responsible for running training and validation
+* ```plot_eval_dict``` - responsible for plotting Loss vs. Epoch and Training/Validation Accuracy vs. Epoch from the output of  ```train_and_validate```
+* hyperparameters initialization in the cell **36**
+* preprocessing including augmentation in the cell **37**
+* plotting frequencies of classes in training data set before and after augmentation in the cell **38**
+* training data shuffling in the cell **39**
+* inactive cells between **39 and 40** contain a few models developed on the way from original LeNet-5 to final Lenet_multiscale in **40**
+
+Hyperparameters for the final model were set as follows (cell **36**):
+```
+EPOCHS = 50
+BATCH_SIZE = 128
+rate = 0.0005
+mu = 0
+sigma = 0.1  # used only for original LeNet
+keep_p = 0.125  # dropout parameter
+prelu_alpha = 0.3 # PreLu parameter
+```
+
+Parameter ```sigma``` will be calculated inside of ```LeCun_multiscale``` method separately for each layer depending on the number of inputs as suggested by [Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun](https://arxiv.org/abs/1502.01852).
+```sigma``` will be calculated as ```np.sqrt(2/n)``` for layers with PreLu activation and as ```np.sqrt(1/n)``` for layers without (last one), where ```n``` is a number of inputs. This aproach helps to improve initialization as will be shown later.
+
+Parameters of the preprocessing can be found in the cell **37**:
+
+```
+grayscale=True    # use Grayscale conversion
+eqHist=False      # don't use Histogram Equalization
+undersample=False # don't use undersampling
+oversample=True   # use oversampling...
+perturb=True      # ...with perturbations (translate, scale, rotate)
+rescaling='standardize' # use Standardization for normalization
+```
 
 ####5. Describe the approach taken for finding a solution. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
