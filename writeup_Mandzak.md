@@ -124,22 +124,25 @@ Balancing is implemented in the ```resample``` method that is applied to trainin
 ####3. Describe, and identify where in your code, what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
 The code for my final model is located in the 30th cell of the ipython notebook in then ```LeNet_modified``` method. 
-
+All batch and channel strides are 1, all padding are 'VALID'.
 My final model consisted of the following layers:
 
-| Layer         		|     Description	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32 RGB or Grayscale image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 28x28x6 	|
-| RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
-
+| Layer         		|     Description	        				                    	| 
+|:---------------:|:------------------------------------------------:| 
+| Input         		| 32x32xL, L=3 for RGB and L=1 for Grayscale image | 
+| Convolutional 1 | 5x5xLx6, 1x1 stride, outputs 28x28x6  	          |
+| Max pooling	1  	| 2x2 filter, 2x2 stride, outputs 14x14x6          |
+| Activation 1    |	PReLU                                            |
+| Convolutional 2 | 5x5x6x6, 1x1 stride, outputs 10x10x16 	          |
+| Max pooling	2  	| 2x2 filter, 2x2 stride, outputs 5x5x16           |
+| Activation 2    |	PReLU                                            |
+| Convolutional 3 | 5x5x16x400, 1x1 stride, outputs 1x1x400 	        |
+| Activation 3    |	PReLU                                            |
+| Flatten 1       | applied to Activation 2 5x5x16, ouputs 400       |
+| Flatten 2       | applied to Activation 3 1x1x400, ouputs 400      |
+| Concatenation   | Flatten 1 + Flatten 2, ouputs 800                |
+| Dropout         |                                                  |
+| Fully connected	| outputs 43        									                      |
 
 ####4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
