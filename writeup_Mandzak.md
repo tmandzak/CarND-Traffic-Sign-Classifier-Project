@@ -30,6 +30,11 @@ The goals / steps of this project are the following:
 [grayscale.png]: ./examples/grayscale.png
 [scaling.png]: ./examples/scaling.png
 [perturbation.png]: ./examples/perturbation.png
+[resampled.png]: ./examples/resampled.png
+
+
+
+[SermanetLeCun]: http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -63,7 +68,7 @@ signs data set:
 The code for this step is contained in code cells 5 - 10 of the IPython notebook.  
 Method ```draw_signs``` (cell 5) is responsible for drawing a limited random subset of all signs or a limited sequential subset of a given class of signs. ```draw_signs``` was used to produce images below.
 
-Following random set gives us general presentation of traffic sign images of various classes:
+Following random set gives us general presentation of traffic sign images in various classes:
 
 ![alt text][random50signs.png]
 
@@ -71,44 +76,46 @@ Here is an exploratory visualization of the data set. It is a bar chart showing 
 
 ![alt text][labelsFrequency.png]
 
-We can see here that classes are highly imbalanced so we need to try balancing them to reduce negative effects on the quality of classification. Cell 8 gives us mean frequency of 809 and we'll use it as a target for random under- and oversampling.
+We can see here that classes are highly imbalanced so we need to try balancing them to reduce negative effects on the quality of classification. Cell 8 gives us mean frequency of 809 and we'll use it as a target for random under- and oversampling (augmentation). We can also see that classes in test and validation sets are distributed the same way as in the training set. 
 
-Following two images present sequential (as met in the dataset) subsets of signs in minority and majority classes correspondingly:
+Following two figures present sequential (as met in the dataset) subsets of signs in minority and majority classes correspondingly:
 
+Minority class
 ![alt text][minorityClassSign.png]
 
+Majority class
 ![alt text][majorityClassSign.png]
 
-For now I'll just notice that both classes contain groups of relatevely similiar images that are probably obtained as video frames series recorded on the same sign. 
+For now I'll just notice that both classes contain groups of relatevely similiar images that are probably obtained from video frames. 
 
 ###Design and Test a Model Architecture
 
 ####1. Describe how, and identify where in your code, you preprocessed the image data. What tecniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc.
 
-Conversion to grayscale is a widely used technique in Computer Vision that lets reduce model complexity so I've decided to apply it in this project as well. Another technique I am going to try out is [Histogram equalization](https://en.wikipedia.org/wiki/Histogram_equalization). Through this adjustment the intensities can be better distributed on the histogram. This allows for areas of lower local contrast to gain a higher contrast. Demonstration of these methods is performed in cells 12-16 and includes following illustration: 
+Conversion to grayscale is a widely used technique in Computer Vision that lets reduce model complexity so I've decided to apply it in this project as well. Another technique I am going to try out is [Histogram equalization](https://en.wikipedia.org/wiki/Histogram_equalization). This allows for areas of lower local contrast to gain a higher contrast. Demonstration of these methods is performed in cells **12-16** and includes following illustration: 
 
 ![alt text][grayscale.png]
 
-Since the range of values of raw data varies widely, in some machine learning algorithms, objective functions will not work properly without normalization. In this project I'm going to try out three ways of normalization:
+Variety in the range of values of raw data may cause objective functions to work inproperly without normalization. In this project I'm going to give a try to these three ways of normalization:
 
-* scale the range in [−1, 1] - squeeze
+* scale the range in [−1, 1] - (squeeze)
 * standardize 
-* scale the range in [0, 1] - normalize
+* scale the range in [0, 1] - (normalize)
 
-All are implemented and presented in cells 20-21. Here is an example of a traffic sign image before and after normalization:
+All three are implemented and demonstrated in cells **20-21**. Here is an example of a traffic sign image before and after normalization:
 
 ![alt text][scaling.png]
 
-Full preprocessing is implemented in the cell 22 in method ```preprocess``` and is applied to the dataset in the cell 37.
-Note that preprocessing also includes under/oversampling (augmentation) of the training data.
+Full preprocessing is implemented in the cell **22** (method ```preprocess```) and is applied to the dataset in the cell **37**.
+Note that preprocessing also includes augmentation of the training data mentioned later.
 
 ####2. Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)
 
 In this project I just used the validation set provided in valid.p file.
 
-Code cells 17-19 of the IPython notebook contain the code for balancing training data classes through random under- and oversampling with options to just copy existing images or apply additional random perturbation. I decided to try out undersampling of majority classes in the training dataset since there can be lots of similarities in majority classes as demonstrated on exploratory visualisation figure. Images that are chosen for oversampling are randomly perturbed in position ([-2,2] pixels), in scale ([.9,1.1] ratio) and rotation ([-15,+15] degrees) as suggested in this [article](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf).
+Code cells 17-19 of the IPython notebook contain the code for balancing training data classes through random under- and oversampling with options to just copy existing images or apply additional random perturbation. I decided to try out undersampling of majority classes in the training dataset since there can be lots of similarities in majority classes as demonstrated on exploratory visualisation figure. Images in minority classes can be randomly perturbed in position ([-2,2] pixels), in scale ([.9,1.1] ratio) and rotation ([-15,+15] degrees) during augmentation as suggested in Sermanet & LeCun [article][SermanetLeCun].
 
-Here is an example of an original image and augmented images that correspond to aforementioned perturbations:
+Here is an example of aforementioned perturbations:
 
 ![alt text][perturbation.png]
 
@@ -119,13 +126,18 @@ I am going to try out following cases of balancing:
 * oversampling with perturbation (augmentation)
 * undersampling + oversampling simulaneously, when all classes have equal amounts of 809 members
 
-Balancing is implemented in the ```resample``` method that is applied to training dataset in the cell 37 inside of the ```preprocess``` method as noted before.
+Balancing is implemented in the ```resample``` method that is applied to training dataset in the cell **37** inside of the ```preprocess``` method as noted before.
+
+After augmentation of training data freaquencies of classes look like this:
+
+![alt text][resampled.png]
 
 ####3. Describe, and identify where in your code, what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-The code for my final model is located in the 30th cell of the ipython notebook in then ```LeNet_modified``` method. 
-All batch and channel strides are 1, all padding are 'VALID'.
-My final model consisted of the following layers:
+The code for my final model is located in the cell **31** of the ipython notebook in the ```LeNet_multiscale``` method. 
+The model represents Convolutional Neural Network that implements the idea of Multi-Scale Features proposed by [Sermanet & LeCun][SermanetLeCun] and is built iteratively starting from original LeNet-5 architecture.
+All batch and channel strides are 1, all paddings are 'VALID'.
+My final model consists of the following layers:
 
 | Layer         		|     Description	        				                    	| 
 |:---------------:|:------------------------------------------------:| 
@@ -136,13 +148,15 @@ My final model consisted of the following layers:
 | Convolutional 2 | 5x5x6x6, 1x1 stride, outputs 10x10x16 	          |
 | Max pooling	2  	| 2x2 filter, 2x2 stride, outputs 5x5x16           |
 | Activation 2    |	PReLU                                            |
-| Convolutional 3 | 5x5x16x400, 1x1 stride, outputs 1x1x400 	        |
-| Activation 3    |	PReLU                                            |
 | Flatten 1       | applied to Activation 2 5x5x16, ouputs 400       |
-| Flatten 2       | applied to Activation 3 1x1x400, ouputs 400      |
-| Concatenation   | Flatten 1 + Flatten 2, ouputs 800                |
+| Avg pooling     | applied to Activation 1 14x14x6, ouputs 7x7x6    |
+| Flatten 2       | applied to Avg pooling 7x7x6, outputs 294        |
+| Concatenation   | Flatten 1 + Flatten 2, ouputs 694                |
+| Fully connected	| input 694, outputs 86						                      |
+| Activation 3    |	PReLU                                            |
 | Dropout         |                                                  |
-| Fully connected	| outputs 43        									                      |
+| Fully connected	| input 86, outputs 43 						                      |
+
 
 ####4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
@@ -216,3 +230,5 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 
 
 For the second image ... 
+
+
