@@ -148,23 +148,23 @@ The model represents Convolutional Neural Network that implements the idea of Mu
 All batch and channel strides are 1, all paddings are 'VALID'.
 My final model consists of the following layers:
 
-| Layer         		|     Description	        				                    	| 
+| Layer           |     Description	        				                    	| 
 |:---------------:|:------------------------------------------------:| 
-| Input         		| 32x32xL, L=3 for RGB and L=1 for Grayscale image | 
+| Input           | 32x32xL, L=3 for RGB and L=1 for Grayscale image | 
 | Convolutional 1 | 5x5xLx6, 1x1 stride, outputs 28x28x6  	          |
-| Max pooling	1  	| 2x2 filter, 2x2 stride, outputs 14x14x6          |
+| Max pooling	1 | 2x2 filter, 2x2 stride, outputs 14x14x6          |
 | Activation 1    |	PReLU                                            |
 | Convolutional 2 | 5x5x6x6, 1x1 stride, outputs 10x10x16 	          |
-| Max pooling	2  	| 2x2 filter, 2x2 stride, outputs 5x5x16           |
+| Max pooling	2 | 2x2 filter, 2x2 stride, outputs 5x5x16           |
 | Activation 2    |	PReLU                                            |
 | Flatten 1       | applied to Activation 2 5x5x16, ouputs 400       |
 | Avg pooling     | applied to Activation 1 14x14x6, ouputs 7x7x6    |
 | Flatten 2       | applied to Avg pooling 7x7x6, outputs 294        |
 | Concatenation   | Flatten 1 + Flatten 2, ouputs 694                |
-| Fully connected	| input 694, outputs 86						                      |
+| Fully connected | input 694, outputs 86						                      |
 | Activation 3    |	PReLU                                            |
 | Dropout         |                                                  |
-| Fully connected	| input 86, outputs 43 						                      |
+| Fully connected | input 86, outputs 43 						                      |
 
 
 ####4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
@@ -336,16 +336,16 @@ For the first case, as we can see it from the bar chart to the right correct pre
 
 Precisions and Recalls for chosen traffic signs along with their frequencies in the training set before augmentation are presented in the table below:
 
-	
-Labels			Frequencies	Precision	Recall
-15	540	0.941	0.995
-1	1980	0.968	0.982
-13	1920	0.993	0.993
-40	300	0.953	0.911
-17	990	0.997	0.989
-25	1350	0.963	0.944
-12	1890	0.991	0.983
-28	480	0.954	0.973
+| Label | Frequency | Precision | Recall |
+|:-----:|:---------:|:---------:|:------:| 	
+| 15	| 540       | 0.941	| 0.995  |
+| 1	| 1980	    | 0.968	| 0.982  |
+| 13	| 1920	    | 0.993	| 0.993  |
+| 40	| 300	    | 0.953	| 0.911  |
+| 17	| 990	    | 0.997	| 0.989  |
+| 25	| 1350	    | 0.963	| 0.944  |
+| 12	| 1890	    | 0.991	| 0.983  |
+| 28	| 480	    | 0.954	| 0.973  |
 
-
+Running the test on eight images showed problems with prediction of a class 40 sign much often then others that corresponds to the lowest Recall of 0.911 and the lowest frequency of 300 comparing to other 7 classes in the non-augmented training dataset.
 
