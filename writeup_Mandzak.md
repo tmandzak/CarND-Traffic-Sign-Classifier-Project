@@ -15,14 +15,6 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
 [random50signs.png]: ./examples/random50signs.png
 [labelsFrequency.png]: ./examples/labelsFrequency.png
 [minorityClassSign.png]: ./examples/minorityClassSign.png
@@ -44,6 +36,8 @@ The goals / steps of this project are the following:
 [3_Lenet_SD_G_perturb_stand_prelu_03_max_0972_0949_931_918_less_86_ms_FINAL.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_max_0972_0949_931_918_less_86_ms_FINAL.png
 [3_Lenet_SD_G_perturb_stand_prelu_03_max_0970_0951_937_934_less_86_ms_epoch100.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_max_0970_0951_937_934_less_86_ms_epoch100.png
 [3_Lenet_SD_G_perturb_stand_prelu_03_max_0976_0958_939_933_less_86_ms_epoch50_RGB.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_max_0976_0958_939_933_less_86_ms_epoch50_RGB.png
+[inetSigns.png]: ./examples/inetSigns.png
+[inetSignsPredictions.png]: ./examples/inetSignsPredictions.png
 
 
 
