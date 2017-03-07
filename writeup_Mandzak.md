@@ -317,45 +317,41 @@ If a well known architecture was chosen:
 
 ####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-Here are five German traffic signs that I found on the web:
+Here are eight German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][inetSigns.png]
 
-The first image might be difficult to classify because ...
+First four images might be difficult to classify because they are taken from rather uncommon angles, in addition the fourth image's claass (40) has only 300 instances in the training set. Fifth (class 17) and eighth (class 28) signs have some stickers on it. 
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
-The code for making predictions on my final model is located in the tenth cell of the Ipython notebook.
+The code for making predictions on my final model is located in cells **45-54** of the Ipython notebook.
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+![alt text][inetSignsPredictions.png]
 
-
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 6 of the 8 traffic signs, which gives an accuracy of 75%. It's less 
+then accuracy on the test set (95%), but choice of classes for this subset has big influence on this result, so
+this comparisson isn't much informative.  
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+For all cases the model was almost 100% sure of it's prediction. 
+For the first case, as we can see it from the bar chart to the right correct prediction is on the second place.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+Precisions and Recalls for chosen traffic signs along with their frequencies in the training set before augmentation are presented in the table below:
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+	
+Labels			Frequencies	Precision	Recall
+15	540	0.941	0.995
+1	1980	0.968	0.982
+13	1920	0.993	0.993
+40	300	0.953	0.911
+17	990	0.997	0.989
+25	1350	0.963	0.944
+12	1890	0.991	0.983
+28	480	0.954	0.973
 
-
-For the second image ... 
 
 
