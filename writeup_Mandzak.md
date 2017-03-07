@@ -38,6 +38,8 @@ The goals / steps of this project are the following:
 [2_Lenet_Sigma_Droput_0125_0005_50_under.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_under.png
 [2_Lenet_Sigma_Droput_0125_0005_50_over.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_over.png
 [2_Lenet_Sigma_Droput_0125_0005_50_over_perturb_0943.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_over_perturb_0943.png
+[2_Lenet_Sigma_Droput_0125_0005_50_both_perturb_0919.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_both_perturb_0919.png
+[3_Lenet_SD_G_perturb_stand_prelu_03_0973.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_0973.png
 
 
 
@@ -233,8 +235,8 @@ and got following results:
 
 ![alt text][0_Lenet_original.png]
 
-Though the larning rate looks to be good as it can be seen from Loss plot, the validation accuracy on starting epochs is below 0.5 and there is quite big gap between training and validation accuracy telling us about overfitting.
-On applying ```sigma``` formulas mentioned above we got an immidiate improvement (```LeNet_sigma_dropout``` model):
+Though the learning rate looks to be good as it can be seen from Loss plot, the validation accuracy on starting epochs is below 0.5 and there is quite big gap between training and validation accuracy telling us about overfitting.
+On applying ```sigma``` formulas mentioned above we got an emmidiate improvement of initialization (```LeNet_sigma_dropout``` model):
 
 ![alt text][1_Lenet_Sigma_B128.png]
 
@@ -265,9 +267,22 @@ Oversampling
 
 ![alt text][2_Lenet_Sigma_Droput_0125_0005_50_over.png]
 
-Undersampling with perturbations
+Oversampling with perturbations
 
 ![alt text][2_Lenet_Sigma_Droput_0125_0005_50_over_perturb_0943.png]
+
+Both Undersampling and Oversampling with perturbations:
+
+![alt text][2_Lenet_Sigma_Droput_0125_0005_50_both_perturb_0919.png]
+
+And as it can be easely seen, oversampling with perturbations gave us the best result with 0.943 Validation Accuracy.
+
+Next using Grayscale conversion with Standardization normalization gave us slightly better Validation Accuracy of 0.966 comparing to 0.959 for [0, 1] scaling and 0.961 for [-1, 1] scaling. Since Histogram Equalization didn't improve this accuracy I didn't use it for later experiments.
+
+Original LeNet model already uses RELU activation, but I was curious what if I substitute it with a more general PreLU? 
+Tweaking the only PreLu parameter ```prelu_alpha``` let us achieve even 0.973 Validation Accurracy for ```prelu_alpha = 0.3```:
+
+![alt text][3_Lenet_SD_G_perturb_stand_prelu_03_0973.png]
 
 
 
