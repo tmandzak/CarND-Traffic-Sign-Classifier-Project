@@ -31,6 +31,15 @@ The goals / steps of this project are the following:
 [scaling.png]: ./examples/scaling.png
 [perturbation.png]: ./examples/perturbation.png
 [resampled.png]: ./examples/resampled.png
+[0_Lenet_original.png]: ./examples/0_Lenet_original.png
+[1_Lenet_Sigma_B128.png]: ./examples/1_Lenet_Sigma_B128.png
+[2_Lenet_Sigma_Droput_0125.png]: ./examples/2_Lenet_Sigma_Droput_0125.png
+[2_Lenet_Sigma_Droput_0125_0005_50.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50.png
+[2_Lenet_Sigma_Droput_0125_0005_50_under.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_under.png
+[2_Lenet_Sigma_Droput_0125_0005_50_over.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_over.png
+[2_Lenet_Sigma_Droput_0125_0005_50_over_perturb_0943.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_over_perturb_0943.png
+
+
 
 
 
@@ -184,7 +193,7 @@ prelu_alpha = 0.3 # PreLu parameter
 ```
 
 Parameter ```sigma``` will be calculated inside of ```LeCun_multiscale``` method separately for each layer depending on the number of inputs as suggested by [Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun](https://arxiv.org/abs/1502.01852).
-```sigma``` will be calculated as ```np.sqrt(2/n)``` for layers with PreLu activation and as ```np.sqrt(1/n)``` for layers without (last one), where ```n``` is a number of inputs. This aproach helps to improve initialization as will be shown later.
+```sigma = np.sqrt(2/n)``` for layers with PreLu activation and as ```sigma = np.sqrt(1/n)``` for layers without (last one), where ```n``` is a number of inputs. This aproach helps to improve initialization as will be shown later.
 
 Parameters of the preprocessing can be found in the cell **37**:
 
@@ -199,19 +208,69 @@ rescaling='standardize' # use Standardization for normalization
 
 ####5. Describe the approach taken for finding a solution. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
-The code for calculating the accuracy of the model is located in the ninth cell of the Ipython notebook.
+The code for calculating training and validation accuracy of the model is located inside of ```train_and_validate``` method (cell **34**) that reuses ```evaluation``` method defined in previous cell **33**. 
+Test accuracy is calculated in the cell **41** calling the same ```evaluation``` method.
+In the next cell average Precision and Recall are obtained.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of **0.995**
+* validation set accuracy of **0.972**
+* test set accuracy of **0.949**
+* average Precision of **0.931**
+* average Recall of **0.918**
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to over fitting or under fitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+I've chosen an iterative approach starting from original LeNet-5 model  as a familiar and working example.
+First I run it (```LeNet_original``` model) on RGB images without any preprocessing and augmentation with this set of parameters:
+
+```
+EPOCHS = 20
+BATCH_SIZE = 128
+rate = 0.001
+mu = 0
+sigma = 0.1
+```
+and got following results:
+
+![alt text][0_Lenet_original.png]
+
+Though the larning rate looks to be good as it can be seen from Loss plot, the validation accuracy on starting epochs is below 0.5 and there is quite big gap between training and validation accuracy telling us about overfitting.
+On applying ```sigma``` formulas mentioned above we got an immidiate improvement (```LeNet_sigma_dropout``` model):
+
+![alt text][1_Lenet_Sigma_B128.png]
+
+Trying ```BATCH_SIZE = 64``` and ```BATCH_SIZE = 256``` wasn't successfull, so I left it to be ```128```.
+To reduce overfitting I applied dropout with ```keep_p = 0.125``` (```LeNet_sigma_dropout``` model), but it was not enough since Loss plot indicated bad learning rate and plots of accuracies tell us to increase number of ```EPOCHS```:
+
+![alt text][2_Lenet_Sigma_Droput_0125.png]
+
+Using this set of parameters worked well from now on:
+
+```
+EPOCHS = 50
+BATCH_SIZE = 128
+rate = 0.0005
+mu = 0
+keep_p = 0.125
+```
+
+![alt text][2_Lenet_Sigma_Droput_0125_0005_50.png]
+
+Next step was to try random undersampling, oversampling and oversampling with perturbations:
+
+Undersampling
+
+![alt text][2_Lenet_Sigma_Droput_0125_0005_50_under.png]
+
+Oversampling
+
+![alt text][2_Lenet_Sigma_Droput_0125_0005_50_over.png]
+
+Undersampling with perturbations
+
+![alt text][2_Lenet_Sigma_Droput_0125_0005_50_over_perturb_0943.png]
+
+
+
 
 If a well known architecture was chosen:
 * What architecture was chosen?
