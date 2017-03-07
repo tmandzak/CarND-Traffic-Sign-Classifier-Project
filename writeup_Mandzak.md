@@ -40,6 +40,10 @@ The goals / steps of this project are the following:
 [2_Lenet_Sigma_Droput_0125_0005_50_over_perturb_0943.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_over_perturb_0943.png
 [2_Lenet_Sigma_Droput_0125_0005_50_both_perturb_0919.png]: ./examples/2_Lenet_Sigma_Droput_0125_0005_50_both_perturb_0919.png
 [3_Lenet_SD_G_perturb_stand_prelu_03_0973.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_0973.png
+[3_Lenet_SD_G_perturb_stand_prelu_03_max_0966.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_max_0966.png
+[3_Lenet_SD_G_perturb_stand_prelu_03_max_0972_0949_931_918_less_86_ms_FINAL.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_max_0972_0949_931_918_less_86_ms_FINAL.png
+[3_Lenet_SD_G_perturb_stand_prelu_03_max_0970_0951_937_934_less_86_ms_epoch100.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_max_0970_0951_937_934_less_86_ms_epoch100.png
+[3_Lenet_SD_G_perturb_stand_prelu_03_max_0976_0958_939_933_less_86_ms_epoch50_RGB.png]: ./examples/3_Lenet_SD_G_perturb_stand_prelu_03_max_0976_0958_939_933_less_86_ms_epoch50_RGB.png
 
 
 
@@ -181,7 +185,7 @@ To train the model, I used the code from [LeNet Lab Solution](https://github.com
 * preprocessing including augmentation in the cell **37**
 * plotting frequencies of classes in training data set before and after augmentation in the cell **38**
 * training data shuffling in the cell **39**
-* inactive cells between **39 and 40** contain a few models developed on the way from original LeNet-5 to final Lenet_multiscale in **40**
+* cells **25 - 31** contain a few models developed on the way from original LeNet-5 to final Lenet_multiscale that is executed in the cell **40**. These models are placed in brackets when mentioned below (```LeNet_original``` ```LeNet_sigma_dropout``` ```LeNet_max``` ```LeNet_short``` ```LeNet_multiscale```). 
 
 Hyperparameters for the final model were set as follows (cell **36**):
 ```
@@ -280,13 +284,29 @@ And as it can be easely seen, oversampling with perturbations gave us the best r
 Next using Grayscale conversion with Standardization normalization gave us slightly better Validation Accuracy of 0.966 comparing to 0.959 for [0, 1] scaling and 0.961 for [-1, 1] scaling. Since Histogram Equalization didn't improve this accuracy I didn't use it for later experiments.
 
 Original LeNet model already uses RELU activation, but I was curious what if I substitute it with a more general PreLU? 
-Tweaking the only PreLu parameter ```prelu_alpha``` let us achieve even 0.973 Validation Accurracy for ```prelu_alpha = 0.3```:
+Tweaking the only PreLu parameter ```prelu_alpha``` let us achieve even 0.973 Validation Accurracy for ```prelu_alpha = 0.3``` (```LeNet_prelu``` model):
 
 ![alt text][3_Lenet_SD_G_perturb_stand_prelu_03_0973.png]
 
+Another thing to try was placing pooling before PreLU so that PreLU deals with smaller input as recommended by [Nikolas Markou](http://nmarkou.blogspot.ca/2017/02/the-black-magic-of-deep-learning-tips.html?utm_content=bufferab398&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer&m=1). Though numbers inputs for PreLUs decreased 4 times it had no visible impact on accuracy (```LeNet_max``` model):
 
+![alt text][3_Lenet_SD_G_perturb_stand_prelu_03_max_0966.png]
 
+Since I suspected the model to be still overfitted I decided to experiment simplifing the model. The most successfull try was to remove middle fully connected layer ```fc2``` and set the number of outputs for  ```fc1``` to be twice as number of classes or 86. Such a reduction still didn't influence the Valdation Accuracy (```LeNet_short``` model).
 
+The last modification of the model was implementation of an idea of Multi-Scale feature mentioned by [Sermanet & LeCun][SermanetLeCun]. Here I've just concatenated flattened outputs of the second convolution layer and the first one previously subsampled by average pooling. This update let me achive the result of **0.972 Validation Accuracy** and **0.949 Test Accuracy**:
+
+![alt text][3_Lenet_SD_G_perturb_stand_prelu_03_max_0972_0949_931_918_less_86_ms_FINAL.png]
+
+Last two experiments were to increase number of epochs to 100:
+
+![alt text][3_Lenet_SD_G_perturb_stand_prelu_03_max_0970_0951_937_934_less_86_ms_epoch100.png]
+
+and to use color images as an input:
+
+![alt text][3_Lenet_SD_G_perturb_stand_prelu_03_max_0976_0958_939_933_less_86_ms_epoch50_RGB.png]
+
+As a result slightly better **Test Accuracies** were achieved: **0.951** and **0.958** respectively.
 If a well known architecture was chosen:
 * What architecture was chosen?
 * Why did you believe it would be relevant to the traffic sign application?
