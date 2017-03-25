@@ -46,7 +46,7 @@ The goals / steps of this project are the following:
 [SermanetLeCun]: http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
 
 ---
 ### Writeup / README
@@ -313,7 +313,7 @@ Here are eight German traffic signs that I found on the web:
 
 First four images might be difficult to classify because they are taken from rather uncommon angles, in addition the fourth image's claass (40) has only 300 instances in the training set. Fifth (class 17) and eighth (class 28) signs have some stickers on it. 
 
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
 The code for making predictions on my final model is located in cells **45-54** of the Ipython notebook.
 
